@@ -1,0 +1,267 @@
+---
+swagger: "2.0"
+info:
+  description: "This is Our CHECKOUT-APP."
+  version: "0.0.1"
+  title: "Seemab khan "
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "seemabafriid888@gmail.com"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "virtserver.swaggerhub.com"
+basePath: "/checkout/checkout/0.0.1"
+tags:
+- name: "checkout"
+  description: "Operations about checkout"
+  externalDocs:
+    description: "Find out more about our store"
+    url: "http://swagger.io"
+schemes:
+- "https"
+- "http"
+paths:
+  /checkout:
+    post:
+      tags:
+      - "checkout"
+      summary: "Create checkout"
+      description: "This can only be done by the logged in checkout."
+      operationId: "createcheckout"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Created checkout object"
+        required: true
+        schema:
+          $ref: "#/definitions/checkout"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "Checkout"
+  /checkout/createWithArray:
+    post:
+      tags:
+      - "checkout"
+      summary: "Creates list of checkouts with given input array"
+      description: ""
+      operationId: "createcheckoutsWithArrayInput"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of checkout object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/checkout"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "Checkout"
+  /checkout/createWithList:
+    post:
+      tags:
+      - "checkout"
+      summary: "Creates list of checkouts with given input array"
+      description: ""
+      operationId: "createcheckoutsWithListInput"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "List of checkout object"
+        required: true
+        schema:
+          type: "array"
+          items:
+            $ref: "#/definitions/checkout"
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "Checkout"
+  /checkout/login:
+    get:
+      tags:
+      - "checkout"
+      summary: "Logs checkout into the system"
+      description: ""
+      operationId: "logincheckout"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "checkoutname"
+        in: "query"
+        description: "The checkout name for login"
+        required: true
+        type: "string"
+      - name: "password"
+        in: "query"
+        description: "The password for login in clear text"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          headers:
+            X-Rate-Limit:
+              type: "integer"
+              format: "int32"
+              description: "calls per hour allowed by the checkout"
+            X-Expires-After:
+              type: "string"
+              format: "date-time"
+              description: "date in UTC when token expires"
+          schema:
+            type: "string"
+        400:
+          description: "Invalid checkoutname/password supplied"
+      x-swagger-router-controller: "Checkout"
+  /checkout/logout:
+    get:
+      tags:
+      - "checkout"
+      summary: "Logs out current logged in checkout session"
+      description: ""
+      operationId: "logoutcheckout"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters: []
+      responses:
+        default:
+          description: "successful operation"
+      x-swagger-router-controller: "Checkout"
+  /checkout/{checkoutname}:
+    get:
+      tags:
+      - "checkout"
+      summary: "Get checkout by checkout name"
+      description: ""
+      operationId: "getcheckoutByName"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "checkoutname"
+        in: "path"
+        description: "The name that needs to be fetched. Use checkout1 for testing. "
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/checkout"
+        400:
+          description: "Invalid checkoutname supplied"
+        404:
+          description: "checkout not found"
+      x-swagger-router-controller: "Checkout"
+    put:
+      tags:
+      - "checkout"
+      summary: "Updated checkout"
+      description: "This can only be done by the logged in checkout."
+      operationId: "updatecheckout"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "checkoutname"
+        in: "path"
+        description: "name that need to be updated"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Updated checkout object"
+        required: true
+        schema:
+          $ref: "#/definitions/checkout"
+      responses:
+        400:
+          description: "Invalid checkout supplied"
+        404:
+          description: "checkout not found"
+      x-swagger-router-controller: "Checkout"
+    delete:
+      tags:
+      - "checkout"
+      summary: "Delete checkout"
+      description: "This can only be done by the logged in checkout."
+      operationId: "deletecheckout"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "checkoutname"
+        in: "path"
+        description: "The name that needs to be deleted"
+        required: true
+        type: "string"
+      responses:
+        400:
+          description: "Invalid checkoutname supplied"
+        404:
+          description: "checkout not found"
+      x-swagger-router-controller: "Checkout"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  checkout:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+      checkoutname:
+        type: "string"
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      email:
+        type: "string"
+      password:
+        type: "string"
+      phone:
+        type: "string"
+      checkoutStatus:
+        type: "integer"
+        format: "int32"
+        description: "checkout Status"
+    xml:
+      name: "checkout"
+    example:
+      firstName: "firstName"
+      lastName: "lastName"
+      password: "password"
+      phone: "phone"
+      id: 0
+      checkoutname: "checkoutname"
+      checkoutStatus: 6
+      email: "email"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
